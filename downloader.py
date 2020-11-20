@@ -59,12 +59,11 @@ def download(symbol, start, end):
     return pd.DataFrame.from_records(records)
 
 
-def download_binance(days_before=7, days_after=7, skip_bad=False):
+def download_binance(days_before=7, days_after=7):
     '''
     Download all the transactions for all the pumps in binance in a given interval
     @param days_before: the number of days before the pump
     @param days_after: the number of days after the pump
-    @param skip_bad: set this parameter to True if you do not want to download the pumps annotated as 'bad_pump'
     '''
 
     df = pd.read_csv('pump_telegram.csv')
@@ -73,8 +72,6 @@ def download_binance(days_before=7, days_after=7, skip_bad=False):
     for i, pump in binance_only.iterrows():
         symbol = pump['symbol']
         date = pump['date'] + ' ' + pump['hour']
-        if skip_bad and pump['notes'] == 'bad_pump':
-            continue
         pump_time = datetime.strptime(date, "%Y-%m-%d %H:%M")
         before = to_timestamp(pump_time - timedelta(days=days_before))
         after = to_timestamp(pump_time + timedelta(days=days_after))
