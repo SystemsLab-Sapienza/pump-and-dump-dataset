@@ -75,9 +75,15 @@ def download_binance(days_before=7, days_after=7):
         pump_time = datetime.strptime(date, "%Y-%m-%d %H:%M")
         before = to_timestamp(pump_time - timedelta(days=days_before))
         after = to_timestamp(pump_time + timedelta(days=days_after))
+        # to comment out
+        import os
+        if os.path.exists('data/{}_{}'.format(symbol, str(date).replace(':', '.') + '.csv')):
+            print(symbol)
+            continue
+        #
         df = download(symbol, before, after)
         df.to_csv('data/{}_{}'.format(symbol, str(date).replace(':', '.') + '.csv'), index=False)
 
 
 if __name__ == '__main__':
-    download_binance(days_before=7, days_after=7)
+    download_binance(days_before=12, days_after=7)

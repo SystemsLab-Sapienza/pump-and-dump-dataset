@@ -55,7 +55,7 @@ Each transaction contains the following fields, check the [Binance documentation
 
 ***Your contribution is very welcome!***
 
-If you want to help us mantaining the dataset updated, feel free to create a pull request.
+If you want to help us maintain the dataset updated, feel free to create a pull request.
 
 Please, make sure to fill all the fields of the ```pump_telegram.csv``` in your pull request.
 If you add pump and dumps arranged by groups that are not in the ```group.csv``` file, please update this file as well.
@@ -74,3 +74,43 @@ To download all the transactions of the pump and dumps carried out on Binance ru
 ```
 python3 downloader.py
 ```
+
+To compute the features for the machine learning model, run the ```features.py``` script.
+```
+python3 features.py
+```
+It generates 3 features files, one for each chunk size (5, 15, 25 secs). The features are stored in csv files contained in the
+```features``` folder.
+
+The computed features are the following:
+
+* **StdRushOrders** and **AvgRushOrders**: : Moving standard deviation and average of the number of rush orders in each chunk of the moving window.
+
+* **StdTrades**: Moving standard deviation of the number of trades.
+
+* **StdVolumes** and **AvgVolumes**: Moving standard deviation and average of volume of trades in each chunk of the moving window.
+
+* **StdPrice** and **AvgPrice**: Moving standard deviation and average of closing price. 
+
+* **AvgPriceMax** : Moving average of maximal and minimum price in each chunk.
+
+
+
+During our analysis, we found that in some cases, pump and dumps started before or after the organizer shared the signal. To account for this discrepancy, we look into the trading data and manually flag the chunk when the pump and dump actually started.
+For this reason, the labeled chunk may be up to 120 seconds before the time reported in the  ```pump_telegram.csv``` file. 
+This case is usually due to a pre-pump on the targeted coin by the admin.
+We provide the labeled features in the ```labeled features``` folder.
+
+In order to execute our classifier on our labeled features run the ```classifier.py``` file
+```
+python3 classifier.py
+```
+
+# Donation
+If you enjoyed our work, you can buy us a cup of coffee :coffee: donating on this Zcash wallet:
+
+```
+zs1uw83xkwr2rl3hrphxy0sdpnvlgusy9au940af5423f06ntxev6qqzu7hqwhmn5td5a035jzczt9
+```
+
+[![zs1uw83xkwr2rl3hrphxy0sdpnvlgusy9au940af5423f06ntxev6qqzu7hqwhmn5td5a035jzczt9](./wallet/wallet.png?raw=true "Title")](#)
